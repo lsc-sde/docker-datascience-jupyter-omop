@@ -1,2 +1,2 @@
-# docker-datascience-notebook-hades
-LSCSDE data science notebook with integrated 'OHDSI Methods library' (aka Hades)
+# docker-datascience-jupyter-omop
+LSCSDE data science jupyterhub notebook kernels (i.e. RStudio) with integrated OMOP support including Hades and DARWIN.
