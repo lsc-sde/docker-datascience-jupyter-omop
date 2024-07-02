@@ -1,0 +1,37 @@
+name: base
+channels:
+  - conda-forge
+  - defaults
+  - r
+dependencies:
+  - black
+  - bokeh
+  - datashader
+  - email_validator
+  - fastapi
+  - folium
+  - geopandas
+  - geoviews
+  - holoviews
+  - isort
+  - jupyterlab_code_formatter
+  - jupyterlab-git
+  - lxml
+  - open-fonts
+  - openssl
+  - openpyxl
+  - pandas-profiling
+  - pip
+  - ruff
+  - ujson
+  - uvicorn
+  - jupyter-server-proxy
+  - jupyter-vscode-proxy
+  - websockify
+  - jupyter-rsession-proxy
+  - pip:
+      - orjson
+      # - medcat
+      - jupyter-remote-desktop-proxy
+      - plotly
+      - polars
