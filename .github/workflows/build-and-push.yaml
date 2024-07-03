@@ -34,7 +34,7 @@ jobs:
             matrix:
                   variant: ["${{ inputs.variant }}"]
                   version: ${{ fromJSON(inputs.version) }}
-                  platform: ["arm64"]
+                  platform: ["amd64"]
         steps:
             - name: Set up QEMU
               uses: docker/setup-qemu-action@v3
