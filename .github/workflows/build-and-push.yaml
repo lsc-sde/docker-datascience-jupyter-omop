@@ -15,7 +15,6 @@ on:
             platform:
                 required: false 
                 type: string
-                default: arm64
 
 jobs:
     explode-variants:
@@ -52,7 +51,7 @@ jobs:
                     PLATFORM=${{ matrix.platform }}
             # - name: Inspect
             #   run: |
-            #     docker buildx imagetools inspect localhost:5000/datascience-omop:darwin
+            #     docker buildx imagetools inspect localhost:5000/${{ inputs.imageName }}:darwi${{ format('{0}-{1}-{2}', matrix.variant, matrix.version, matrix.platform) }}n
             # - name: Log
             #   run: |
             #     echo "Image: ${{ inputs.imageName }} Tag:${{ format('{0}-{1}', matrix.variant, matrix.version) }} Packages:${{ matrix.variant }} Version:${{ matrix.version }}"

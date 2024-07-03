@@ -8,7 +8,7 @@ jobs:
     #         variant: hades
     #         version: '["v1.14.0","v1.13.1"]'
     darwin:
-        uses: ./.github/workflows/image-variants-explode.yml
+        uses: ./.github/workflows/build-and-push.yaml
         with:
             variant: darwin
             version: '["v1.3.1"]'
