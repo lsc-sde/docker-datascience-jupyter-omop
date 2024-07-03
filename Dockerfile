@@ -50,11 +50,18 @@ RUN fix-permissions "${CONDA_DIR}"
 RUN fix-permissions "/home/${NB_USER}"
 
 # Install OMOP R Packages
+ENV VARIANT=${VARIANT}
+ENV VERSION=${VERSION}
 
-RUN  R -e "install.packages('remotes',dependencies=TRUE, repos='https://cloud.r-project.org/')" && \ 
-    if [ "${VARIANT}" == "hades" ]; then R -e "remotes::install_github('ohdsi/Hades@${VERSION}')" \
-    elif [ "${VARIANT}" == "darwin" ]; then R -e "remotes::install_github('darwin-eu/CDMConnector@${VERSION}')" \
-    else R -e "remotes::install_github('ohdsi/Hades@*release')" && R -e "remotes::install_github('ohdsi/Hades@*release')" ; fi ;
+RUN R -e "install.packages('remotes', dependencies=TRUE, repos='https://cloud.r-project.org/')" && \
+    if [ "${VARIANT}" = "hades" ]; then \
+        R -e "remotes::install_github('ohdsi/Hades@${VERSION}')"; \
+    elif [ "${VARIANT}" = "darwin" ]; then \
+        R -e "remotes::install_github('darwin-eu/CDMConnector@${VERSION}')"; \
+    else \
+        R -e "remotes::install_github('darwin-eu/CDMConnector@*release')" && \
+        R -e "remotes::install_github('ohdsi/Hades@*release')"; \
+    fi
  
 
 USER ${NB_UID}
