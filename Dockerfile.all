@@ -12,10 +12,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 USER root
 
 # Install OMOP R Packages
-ENV VARIANT=${VARIANT}
-ENV VERSION=${VERSION}
-
-RUN R -e "install.packages('remotes', dependencies=TRUE, repos='https://cloud.r-project.org/')" && \
-    R -e "remotes::install_github('ohdsi/Hades@${VERSION}')"
+RUN R -e "install.packages('remotes', repos='https://cloud.r-project.org/')" && \
+    R -e "remotes::install_github('ohdsi/Hades@*release', dependencies = TRUE)" && \
+    R -e "remotes::install_github('darwin-eu/CDMConnector@*release}', dependencies = TRUE)"
    
 USER ${NB_UID}
