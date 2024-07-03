@@ -1,0 +1,58 @@
+name: Explode artefact config
+
+on:
+    workflow_call:
+        inputs:
+            imageName:
+                type: string
+                default: docker-datascience-jupyter-omop
+            variant:
+                required: true
+                type: string
+            version:
+                required: true 
+                type: string
+            platform:
+                required: false 
+                type: string
+                default: arm64
+
+jobs:
+    explode-variants:
+        runs-on: ubuntu-latest
+        services:
+            registry:
+              image: registry:2
+              ports:
+                - 5000:5000
+        strategy:
+            fail-fast: false
+            matrix:
+                  variant: ["${{ inputs.variant }}"]
+                  version: ${{ fromJSON(inputs.version) }}
+                  platform: ["amd64","arm64"]
+        steps:
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@v3
+            
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
+              with:
+                driver-opts: network=host
+            
+            - name: Build and push to local registry
+              uses: docker/build-push-action@v6
+              with:
+                push: true
+                platforms: linux/${{ matrix.platform }}
+                tags: localhost:5000/${{ inputs.imageName }}:${{ format('{0}-{1}-{2}', matrix.variant, matrix.version, matrix.platform) }}
+                build-args: |
+                    VARIANT=${{ matrix.variant }}
+                    VERSION=${{ matrix.version }}
+                    PLATFORM=${{ matrix.platform }}
+            # - name: Inspect
+            #   run: |
+            #     docker buildx imagetools inspect localhost:5000/datascience-omop:darwin
+            # - name: Log
+            #   run: |
+            #     echo "Image: ${{ inputs.imageName }} Tag:${{ format('{0}-{1}', matrix.variant, matrix.version) }} Packages:${{ matrix.variant }} Version:${{ matrix.version }}"

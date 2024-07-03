@@ -1,18 +1,11 @@
 ARG BASE_IMAGE_NAME=jupyter/datascience-notebook
 ARG BASE_IMAGE_TAG=ubuntu-22.04
-ARG BASE_PLATFORM=arm64
 
-FROM --platform=linux/${BASE_PLATFORM} ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
+FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
-ARG PLATFORM=arm64
-ARG TARGET_IMAGE_NAME=datascience-notebook-omop
-ARG TARGET_IMAGE_TAG=darwin
-ARG DARWIN_BUILD=false
-ARG DARWIN_PACKAGE=darwin-eu/CDMConnector
-ARG DARWIN_VERSION=v1.3.1
-ARG PAT_TOKEN=xyz
-
-LABEL image=${TARGET_IMAGE_NAME}
+ARG PLATFORM
+ARG VARIANT
+ARG VERSION
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -57,12 +50,11 @@ RUN fix-permissions "${CONDA_DIR}"
 RUN fix-permissions "/home/${NB_USER}"
 
 # Install OMOP R Packages
-RUN R -e "install.packages('remotes',dependencies=TRUE, repos='https://cloud.r-project.org/')" && \
-    if ["${DARWIN_BUILD}" = "true"] ; then \
-    R -e "remotes::install_github('${DARWIN_PACKAGE}@${DARWIN_VERSION}')" ; else echo "Ignore DARWIN OMOP support" ; fi ;
 
-
-#&& \
-#R -e "remotes::install_github('ohdsi/Hades')"
+RUN  R -e "install.packages('remotes',dependencies=TRUE, repos='https://cloud.r-project.org/')" && \ 
+    if [ "${VARIANT}" == "hades" ]; then R -e "remotes::install_github('ohdsi/Hades@${VERSION}')" \
+    elif [ "${VARIANT}" == "darwin" ]; then R -e "remotes::install_github('darwin-eu/CDMConnector@${VERSION}')" \
+    else R -e "remotes::install_github('ohdsi/Hades@*release')" && R -e "remotes::install_github('ohdsi/Hades@*release')" ; fi ;
+ 
 
 USER ${NB_UID}
