@@ -1,6 +1,7 @@
 name: Image Variant Manifest
 on:
-    push:
+    #push:
+    workflow_dispatch:
 jobs:
     # hades:
     #     uses: ./.github/workflows/image-variants-explode.yml

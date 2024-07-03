@@ -1,4 +1,4 @@
-name: Explode artefact config
+name: Build and push each image artefact
 
 on:
     workflow_call:
@@ -22,7 +22,7 @@ on:
                 required: true
 
 jobs:
-    explode-variants:
+    buildandpush:
         runs-on: ubuntu-latest
         services:
             registry:
@@ -50,7 +50,7 @@ jobs:
                 username: ${{ secrets.DOCKERHUB_USERNAME }}
                 password: ${{ secrets.DOCKERHUB_TOKEN }}
             
-            - name: Build and push to local registry
+            - name: Build and push to registry
               uses: docker/build-push-action@v6
               with:
                 push: true
