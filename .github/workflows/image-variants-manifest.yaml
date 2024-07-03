@@ -3,18 +3,24 @@ on:
     #push:
     workflow_dispatch:
 jobs:
+    base:
+        uses: ./.github/workflows/build-and-push.yaml
+        with:
+            variant: base
+            version: '["v1"]'
+        secrets: inherit
     # hades:
     #     uses: ./.github/workflows/image-variants-explode.yml
     #     with:
     #         variant: hades
     #         version: '["v1.14.0","v1.13.1"]'
     # secrets: inherit
-    darwin:
-        uses: ./.github/workflows/build-and-push.yaml
-        with:
-            variant: darwin
-            version: '["v1.3.1"]'
-        secrets: inherit
+    # darwin:
+    #     uses: ./.github/workflows/build-and-push.yaml
+    #     with:
+    #         variant: darwin
+    #         version: '["v1.3.1"]'
+    #     secrets: inherit
     # latest: "v1.4.0",
     #     uses: ./.github/workflows/image-variants-explode.yml
     #     with:

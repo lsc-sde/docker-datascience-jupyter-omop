@@ -56,6 +56,7 @@ jobs:
                 push: true
                 platforms: linux/${{ matrix.platform }}
                 tags: lscsde/${{ inputs.imageName }}:${{ format('{0}-{1}-{2}', matrix.variant, matrix.version, matrix.platform) }}
+                file: ./Dockerfile.${{ matrix.variant }}
                 build-args: |
                     VARIANT=${{ matrix.variant }}
                     VERSION=${{ matrix.version }}
