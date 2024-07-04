@@ -4,6 +4,8 @@ channels:
   - defaults
   - r
 dependencies:
+  - r-rjava
+  - openjdk
   - black
   - bokeh
   - datashader

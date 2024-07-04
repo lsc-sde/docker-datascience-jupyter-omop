@@ -26,7 +26,9 @@ RUN apt-get install -y --no-install-recommends \
  xorg \
  xubuntu-icon-theme \
  tigervnc-standalone-server \
- tigervnc-xorg-extension
+ tigervnc-xorg-extension \
+ default-jdk \
+ default-jre
 
 RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/*
