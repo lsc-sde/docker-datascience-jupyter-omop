@@ -13,17 +13,17 @@ jobs:
         uses: ./.github/workflows/build-and-push.yaml
         with:
             variant: hades
-            version: '["v1.14.0","v1.13.1"]'
+            version: '["v1.14.0"]'
         secrets: inherit
-    darwin:
-        uses: ./.github/workflows/build-and-push.yaml
-        with:
-            variant: darwin
-            version: '["v1.4.0","v1.3.1"]'
-        secrets: inherit
-    latest:
-        uses: ./.github/workflows/build-and-push.yaml
-        with:
-            variant: all
-            version: '["latest"]'
-        secrets: inherit
+    # darwin: ,"v1.13.1"
+    #     uses: ./.github/workflows/build-and-push.yaml
+    #     with:
+    #         variant: darwin
+    #         version: '["v1.4.0","v1.3.1"]'
+    #     secrets: inherit
+    # latest:
+    #     uses: ./.github/workflows/build-and-push.yaml
+    #     with:
+    #         variant: all
+    #         version: '["latest"]'
+    #     secrets: inherit

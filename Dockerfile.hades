@@ -6,6 +6,7 @@ FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}-${PLATFORM}
 
 ARG VARIANT
 ARG VERSION
+ARG PAT_TOKEN
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -14,8 +15,11 @@ USER root
 # Install OMOP R Packages
 ENV VARIANT=${VARIANT}
 ENV VERSION=${VERSION}
+ENV PAT_TOKEN=${PAT_TOKEN}
 
-RUN R -e "install.packages('remotes', repos='https://cloud.r-project.org/')" && \
-    R -e "remotes::install_github('ohdsi/Hades@${VERSION}', dependencies = TRUE)"
+RUN echo "GITHUB_PAT=${PAT_TOKEN}" >> /root/.Renviron
+
+RUN R -e "install.packages(c('usethis', 'remotes'), repos='https://cloud.r-project.org/')" && \
+    R -e "remotes::install_github('ohdsi/Hades@${VERSION}', dependencies = NA)"
    
 USER ${NB_UID}
