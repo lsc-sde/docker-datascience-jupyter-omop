@@ -20,6 +20,6 @@ ENV PAT_TOKEN=${PAT_TOKEN}
 RUN echo "GITHUB_PAT=${PAT_TOKEN}" >> /root/.Renviron
 
 RUN R -e "install.packages(c('usethis', 'remotes'), repos='https://cloud.r-project.org/')" && \
-    R -e "remotes::install_github('ohdsi/Hades@${VERSION}', auth_token = Sys.getenv('PAT_TOKEN') dependencies = TRUE, build_vignettes = FALSE)"
+    R -e "remotes::install_github('ohdsi/Hades@${VERSION}', auth_token = Sys.getenv('PAT_TOKEN'), dependencies = TRUE, build_vignettes = FALSE)"
    
 USER ${NB_UID}
