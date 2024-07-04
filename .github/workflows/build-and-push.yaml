@@ -20,7 +20,7 @@ on:
                 required: true
             DOCKERHUB_TOKEN:
                 required: true
-            GH_PACKAGE_TOKEN:
+            PAT_TOKEN:
                 required: true
 jobs:
     buildandpush:
@@ -62,7 +62,7 @@ jobs:
                     VARIANT=${{ matrix.variant }}
                     VERSION=${{ matrix.version }}
                     PLATFORM=${{ matrix.platform }}
-                    PAT_TOKEN=${{ secrets.GH_PACKAGE_TOKEN }}
+                    PAT_TOKEN=${{ secrets.PAT_TOKEN }}
             # - name: Inspect
             #   run: |
             #     docker buildx imagetools inspect localhost:5000/${{ inputs.imageName }}:darwi${{ format('{0}-{1}-{2}', matrix.variant, matrix.version, matrix.platform) }}n
