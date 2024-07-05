@@ -20,7 +20,7 @@ RUN R CMD javareconf
 # Install OMOP R Packages
 RUN R -e "install.packages('remotes', repos='https://cloud.r-project.org/')" && \
     R -e "remotes::install_github('ohdsi/Hades@*release', auth_token = Sys.getenv('GITHUB_PAT'), dependencies = TRUE, build_vignettes = FALSE)" && \
-    R -e "remotes::install_github('darwin-eu/CDMConnector@*release}', auth_token = Sys.getenv('GITHUB_PAT'), dependencies = TRUE, build_vignettes = FALSE)"
+    R -e "remotes::install_github('darwin-eu/CDMConnector@*release', auth_token = Sys.getenv('GITHUB_PAT'), dependencies = TRUE, build_vignettes = FALSE)"
    
 USER ${NB_UID}
 
