@@ -10,6 +10,8 @@ ARG PAT_TOKEN
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+USER root
+
 # Install OMOP R Packages
 ENV VARIANT=${VARIANT}
 ENV VERSION=${VERSION}
