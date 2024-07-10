@@ -24,7 +24,7 @@ on:
                 required: true
 jobs:
     buildandpush:
-        runs-on: macos-latest
+        runs-on: macos-14-large
         #services:
         #    registry:
         #      image: registry:2
