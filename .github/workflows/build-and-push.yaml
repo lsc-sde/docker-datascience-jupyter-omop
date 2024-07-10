@@ -39,7 +39,7 @@ jobs:
         steps:
             - name: Install Docker
               run: |
-               brew install docker
+               brew install --cask docker 
                colima start
              
             # - name: Set up QEMU
