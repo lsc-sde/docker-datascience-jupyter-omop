@@ -39,7 +39,8 @@ jobs:
         steps:
             - name: Install Docker
               run: |
-               brew install --cask docker
+               brew install docker
+               colima start
              
             # - name: Set up QEMU
             #   uses: docker/setup-qemu-action@v3
