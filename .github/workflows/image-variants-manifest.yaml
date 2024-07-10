@@ -13,8 +13,8 @@ jobs:
         uses: ./.github/workflows/build-and-push.yaml
         with:
             variant: hades
-            version: '["v1.14.0","v1.13.1"]'
-      #  needs: base
+            version: '["v1.14.0"]'
+      #  needs: base "v1.13.1"
         secrets: inherit
     # darwin:
     #     uses: ./.github/workflows/build-and-push.yaml

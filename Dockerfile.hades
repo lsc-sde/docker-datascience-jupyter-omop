@@ -22,6 +22,6 @@ RUN echo "GITHUB_PAT=${GITHUB_PAT}" >> /root/.Renviron
 RUN R CMD javareconf
 
 RUN R -e "install.packages(c('usethis', 'remotes', 'rJava'), repos='https://cloud.r-project.org/')" && \
-    R -e "remotes::install_github('ohdsi/Hades@${VERSION}', auth_token = Sys.getenv('GITHUB_PAT'), dependencies = TRUE, build_vignettes = FALSE)"
+    R -e "remotes::install_github('ohdsi/Hades@${VERSION}', upgrade = FALSE, auth_token = Sys.getenv('GITHUB_PAT'), dependencies = TRUE, build_vignettes = FALSE)"
    
 USER ${NB_UID}
