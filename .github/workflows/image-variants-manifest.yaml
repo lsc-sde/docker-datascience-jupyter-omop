@@ -9,20 +9,20 @@ jobs:
     #         variant: base
     #         version: '["v1"]'
     #     secrets: inherit
-    hades:
-        uses: ./.github/workflows/build-and-push.yaml
-        with:
-            variant: hades
-            version: '["v1.14.0"]'
-      #  needs: base "v1.13.1"
-        secrets: inherit
-    # darwin:
+    # hades:
     #     uses: ./.github/workflows/build-and-push.yaml
     #     with:
-    #         variant: darwin
-    #         version: '["v1.4.0","v1.3.1"]'
-    #     needs: base
+    #         variant: hades
+    #         version: '["v1.14.0"]'
+    #     needs: base "v1.13.1"
     #     secrets: inherit
+    darwin:
+        uses: ./.github/workflows/build-and-push.yaml
+        with:
+            variant: darwin
+            version: '["v1.4.0"]'
+        # needs: base ,"v1.3.1"
+        secrets: inherit
     # latest:
     #     uses: ./.github/workflows/build-and-push.yaml
     #     with:
