@@ -24,7 +24,7 @@ on:
                 required: true
 jobs:
     buildandpush:
-        runs-on: macos-14-large
+        runs-on: macos-latest
         #services:
         #    registry:
         #      image: registry:2
@@ -37,10 +37,19 @@ jobs:
                   version: ${{ fromJSON(inputs.version) }}
                   platform: ["arm64"]
         steps:
-            - name: Set up QEMU
-              uses: docker/setup-qemu-action@v3
-              with:
-                platforms: linux/${{ matrix.platform }}
+            - name: Install Docker
+              run: |
+               brew install --cask docker
+               open /Applications/Docker.app
+               while ! docker system info > /dev/null 2>&1; do
+                echo "Waiting for Docker to start..."
+                sleep 5
+               done
+
+            # - name: Set up QEMU
+            #   uses: docker/setup-qemu-action@v3
+            #   with:
+            #     platforms: linux/${{ matrix.platform }}
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v3
               with:
