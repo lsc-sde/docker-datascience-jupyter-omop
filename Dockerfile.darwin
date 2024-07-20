@@ -27,9 +27,22 @@ USER ${NB_USER}
 RUN mkdir /home/${NB_USER}/data && mkdir /home/${NB_USER}/drivers && echo "EUNOMIA_DATA_FOLDER=/home/${NB_USER}/data" >> /home/${NB_USER}/.Renviron
 RUN R -e "usethis::edit_r_environ()"
     
+# ToDo: Drivers should be installed in a next layer of images targeted at common architectures
+
+# Databricks JDBC driver
+# ToDo: Extract versions into ARGs
 RUN wget https://databricks-bi-artifacts.s3.us-east-2.amazonaws.com/simbaspark-drivers/jdbc/2.6.38/DatabricksJDBC42-2.6.38.1068.zip \
     && mkdir DatabricksJDBC42-2.6.38.1068 && unzip DatabricksJDBC42-2.6.38.1068.zip -d DatabricksJDBC42-2.6.38.1068 && rm DatabricksJDBC42-2.6.38.1068.zip \
     && mv DatabricksJDBC42-2.6.38.1068/DatabricksJDBC42.jar /home/${NB_USER}/drivers/ \
     && rm -r DatabricksJDBC42-2.6.38.1068
+
+# Databricks ODBC driver
+# ToDo: Extract versions into ARGs
+RUN wget https://databricks-bi-artifacts.s3.us-east-2.amazonaws.com/simbaspark-drivers/odbc/2.8.2/SimbaSparkODBC-2.8.2.1013-Debian-64bit.zip \
+        && unzip SimbaSparkODBC-2.8.2.1013-Debian-64bit.zip \
+        && dpkg -i SimbaSparkODBC-2.8.2.1013-Debian-64bit/simbaspark_2.8.2.1013-2_amd64 \
+        && rm -r SimbaSparkODBC-2.8.2.1013-Debian-64bit \
+        && rm SimbaSparkODBC-2.8.2.1013-Debian-64bit.zip
+
     
 COPY omop_tests.ipynb /home/${NB_USER}/omop_tests.ipynb
