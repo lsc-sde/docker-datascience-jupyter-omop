@@ -1,0 +1,40 @@
+ARG REGISTRY=quay.io
+ARG BASE_IMAGE_NAME=jupyter/r-notebook
+ARG BASE_IMAGE_TAG=latest
+FROM $REGISTRY/${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
+
+USER root
+
+RUN apt-get update \
+    && apt-get install -y \
+    odbcinst1debian2 \
+    libodbc1 \
+    odbcinst \
+    unixodbc \
+    libsasl2-modules-gssapi-mit \
+    cmake
+
+RUN wget https://databricks-bi-artifacts.s3.us-east-2.amazonaws.com/simbaspark-drivers/odbc/2.8.2/SimbaSparkODBC-2.8.2.1013-Debian-64bit.zip \
+        && unzip SimbaSparkODBC-2.8.2.1013-Debian-64bit.zip \
+        && apt install ./simbaspark_2.8.2.1013-2_amd64.deb \
+        && rm *.*
+
+RUN R -e "install.packages(c(\
+                    'remotes'\
+                    ,'CDMConnector'\
+                    ,'CodelistGenerator'\
+                    ,'CohortCharacteristics'\
+                    ,'CohortConstructor'\
+                    ,'CohortSurvival'\
+                    ,'DrugExposureDiagnostics'\
+                    ,'DrugUtilisation'\
+                    ,'Eunomia'\
+                    ,'IncidencePrevalence'\
+                    ,'RJDBC'\
+                    ,'TreatmentPatterns'\
+            ),\
+             repos = 'https://cloud.r-project.org',\
+             lib = '/opt/conda/lib/R/library'\
+             )"
+
+USER ${NB_USER}
