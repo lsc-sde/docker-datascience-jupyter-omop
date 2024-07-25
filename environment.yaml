@@ -4,6 +4,8 @@ channels:
   - defaults
   - r
 dependencies:
+  - cmake
+  - r-arrow
   - r-rjava
   - openjdk
   - black
