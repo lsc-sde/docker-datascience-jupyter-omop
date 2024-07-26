@@ -28,9 +28,14 @@ RUN R -e "r = getOption('repos'); \
             install.packages(rev_deps, dependencies = TRUE, repos = 'https://cloud.r-project.org'); \
           }"
 RUN R -e "remotes::install_github('darwin-eu/CDMConnector@${VERSION}', dependencies = TRUE)"
-    
+
+COPY darwin/ /tmp/darwin/
+WORKDIR /tmp/darwin
+RUN sh unit_tests_runner.sh
+
 USER ${NB_USER}
-    
+WORKDIR /home/${NB_USER}
+
 RUN mkdir /home/${NB_USER}/data && mkdir /home/${NB_USER}/drivers && echo "EUNOMIA_DATA_FOLDER=/home/${NB_USER}/data" >> /home/${NB_USER}/.Renviron
 RUN R -e "usethis::edit_r_environ()"
     
@@ -38,5 +43,5 @@ RUN wget https://databricks-bi-artifacts.s3.us-east-2.amazonaws.com/simbaspark-d
     && mkdir DatabricksJDBC42-2.6.38.1068 && unzip DatabricksJDBC42-2.6.38.1068.zip -d DatabricksJDBC42-2.6.38.1068 && rm DatabricksJDBC42-2.6.38.1068.zip \
     && mv DatabricksJDBC42-2.6.38.1068/DatabricksJDBC42.jar /home/${NB_USER}/drivers/ \
     && rm -r DatabricksJDBC42-2.6.38.1068
-    
+
 COPY omop_tests.ipynb /home/${NB_USER}/omop_tests.ipynb
