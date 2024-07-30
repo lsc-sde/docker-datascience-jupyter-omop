@@ -1,0 +1,16 @@
+name: Image Variant Manifest
+on:
+    #push:
+    workflow_dispatch:
+jobs:
+    testrun:
+        uses: ./.github/workflows/test.yaml
+        with:
+            tag: '1.0.1'
+
+            buildArgs: '[{
+                            "VARIANT": "darwin",
+                            "VERSION": "v1.4.0",
+                            "PLATFORM": "amd64"
+                        }]'
+        secrets: inherit
