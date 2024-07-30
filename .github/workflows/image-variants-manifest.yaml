@@ -4,17 +4,18 @@ on:
     workflow_dispatch:
 jobs:
     darwin:
-        uses: lsc-sde/lsc-sde/.github/workflows/docker-release.yaml@mph/integrate-omop  #just call docker-build.yaml
+        uses: lsc-sde/lsc-sde/.github/workflows/docker-release.yaml@mph/integrate-omop
         with:
             imageName: datascience-jupyter-omop
             directory: docker/datascience-jupyter-omop
-            tagPrefix: 'darwin'
-            # buildArgs:
-            #     '[{
-            #         "VARIANT": "darwin",
-            #         "VERSION": "v1.4.1",
-            #         "PLATFORM": "fuck"
-            #     }]'
+            platforms: '[ "amd64" ]'
+            tagPrefix: darwin
+            buildArgs: '[{
+                            "VARIANT": "darwin",
+                            "VERSION": "v1.4.1",
+                            "PLATFORM": "amd64"
+                        }]'
+        secrets: inherit
      
     # base:
     #     uses: ./.github/workflows/build-and-push.yaml   #just call docker-build.yaml
