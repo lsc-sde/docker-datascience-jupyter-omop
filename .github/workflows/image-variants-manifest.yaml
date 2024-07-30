@@ -6,7 +6,9 @@ jobs:
     darwin:
         uses: lsc-sde/lsc-sde/.github/workflows/docker-release.yaml@mph/integrate-omop  #just call docker-build.yaml
         with:
-            tagPrefix: darwin
+            imageName: datascience-jupyter-omop
+            directory: docker/datascience-jupyter-omop
+            tagPrefix: 'darwin'
             # buildArgs:
             #     '[{
             #         "VARIANT": "darwin",
