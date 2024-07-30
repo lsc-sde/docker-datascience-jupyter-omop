@@ -8,6 +8,7 @@ jobs:
         with:
             imageName: datascience-jupyter-omop
             platforms: '[ "amd64" ]'
+            tag: 'v1'
             tagPrefix: base
             buildArgs: '[{
                             "VARIANT": "base",
