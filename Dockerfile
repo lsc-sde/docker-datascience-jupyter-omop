@@ -3,7 +3,7 @@ ARG BASE_IMAGE_TAG=ubuntu-22.04
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
-ARG PLATFORM=$TARGETPLATFORM
+#ARG PLATFORM=$TARGETPLATFORM
 ARG VARIANT
 ARG VERSION
 
@@ -36,7 +36,7 @@ RUN rm -rf /var/lib/apt/lists/*
 
 
 # RStudio Server
-RUN wget https://s3.amazonaws.com/rstudio-ide-build/server/jammy/${PLATFORM}/rstudio-server-2024.07.0-daily-267-${PLATFORM}.deb
+RUN wget "https://s3.amazonaws.com/rstudio-ide-build/server/jammy/${TARGETPLATFORM}/rstudio-server-2024.07.0-daily-267-${TARGETPLATFORM}.deb"
 RUN gdebi -n rstudio-server-2024.07.0-daily-267-${PLATFORM}.deb
 RUN rm rstudio-server-2024.07.0-daily-267-${PLATFORM}.deb
 RUN echo server-user=${NB_USER} >> /etc/rstudio/rserver.conf
