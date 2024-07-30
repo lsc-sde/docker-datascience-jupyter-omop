@@ -1,0 +1,52 @@
+name: build
+on:
+    workflow_call:
+        inputs:
+            buildArgsJson:
+                required: false
+                type: string
+                default: '[{"KEY":"VALUE"}]'
+jobs:
+    buildpush:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix: 
+                buildargs: ${{ fromJSON(inputs.buildArgsJson) }}
+        steps:
+            - name: Build Args JSON to List Output
+              id: parse_build_args
+              env:
+                JSON_ARGS: ${{ toJSON(matrix.buildargs) }}
+              run: |
+                echo $JSON_ARGS | jq -r 'to_entries | map("\(.key)=\(.value)") | join("\n")' | tee build_args.txt
+                echo "build_args<<EOF" >> $GITHUB_OUTPUT
+                cat build_args.txt >> $GITHUB_OUTPUT
+                echo "EOF" >> $GITHUB_OUTPUT
+                
+            - name: Build and push to registry
+              uses: docker/build-push-action@v6
+              env:
+                JSON_ARGS: true
+              with:
+               push: false
+               tags: lscsde/xxx
+               file: ./Dockerfile.darwin
+               build-args: |
+                <<EOF
+                 ${{ steps.parse_build_args.outputs.build_args }}
+                EOF
+
+#   job1:
+#     runs-on: ubuntu-latest
+#     outputs:
+#       matrix: ${{ steps.set-matrix.outputs.matrix }}
+#     steps:
+#       - id: set-matrix
+#         run: echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
+#   job2:
+#     needs: job1
+#     runs-on: ubuntu-latest
+#     strategy:
+#       matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
+#     steps:
+#       - run: echo "Matrix - Project ${{ matrix.project }}, Config ${{ matrix.config }}"

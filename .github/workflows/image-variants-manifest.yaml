@@ -3,12 +3,23 @@ on:
     #push:
     workflow_dispatch:
 jobs:
-    base:
-        uses: ./.github/workflows/build-and-push.yaml
+    darwin:
+        uses: lsc-sde/lsc-sde/.github/workflows/docker-release.yaml@mph/integrate-omop  #just call docker-build.yaml
         with:
-            variant: base
-            version: '["v1"]'
-        secrets: inherit
+            tagPrefix: darwin
+            # buildArgs:
+            #     '[{
+            #         "VARIANT": "darwin",
+            #         "VERSION": "v1.4.1",
+            #         "PLATFORM": "fuck"
+            #     }]'
+     
+    # base:
+    #     uses: ./.github/workflows/build-and-push.yaml   #just call docker-build.yaml
+    #     with:
+    #         variant: base
+    #         version: '["v1"]'
+    #     secrets: inherit
     # hades:
     #     uses: ./.github/workflows/build-and-push.yaml
     #     with:
@@ -16,13 +27,14 @@ jobs:
     #         version: '["v1.14.0"]'
     #     needs: base "v1.13.1"
     #     secrets: inherit
-    darwin:
-        uses: ./.github/workflows/build-and-push.yaml
-        with:
-            variant: darwin
-            version: '["v1.4.0"]' #"v1.3.1"
-        needs: base
-        secrets: inherit
+    # darwin:
+    #     uses: ./.github/workflows/build-and-push.yaml
+    #     with:
+    #         variant: darwin
+    #         version: '["v1.4.0"]' #"v1.3.1"
+
+    #     needs: base
+    #     secrets: inherit
     # latest:
     #     uses: ./.github/workflows/build-and-push.yaml
     #     with:
