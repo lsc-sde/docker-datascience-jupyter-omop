@@ -9,6 +9,9 @@ ARG VERSION
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+
+RUN echo "Build: ${BUILDARCH}"
+
 USER root
 RUN apt-get update -y
 #RUN apt-get upgrade -y

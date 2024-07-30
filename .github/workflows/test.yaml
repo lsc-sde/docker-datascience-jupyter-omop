@@ -46,18 +46,18 @@ jobs:
               run: |
                   echo "Updated: ${{ steps.revised_tag.outputs.revised_tag }}"
 
-            # - name: Build and push to registry
-            #   uses: docker/build-push-action@v6
-            #   env:
-            #     JSON_ARGS: true
-            #   with:
-            #    push: false
-            #    tags: lscsde/xxx
-            #    file: ./Dockerfile.darwin
-            #    build-args: |
-            #     <<EOF
-            #      ${{ steps.parse_build_args.outputs.build_args }}
-            #     EOF
+            - name: Build and push to registry
+              uses: docker/build-push-action@v6
+              env:
+                JSON_ARGS: true
+              with:
+               push: false
+               tags: lscsde/xxx
+               file: ./Dockerfile
+               build-args: |
+                <<EOF
+                 ${{ steps.parse_build_args.outputs.build_args }}
+                EOF
 
 #   job1:
 #     runs-on: ubuntu-latest
