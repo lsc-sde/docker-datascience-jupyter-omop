@@ -9,8 +9,10 @@ ARG VERSION
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-
+ARG BUILDARCH
 RUN echo "Build: ${BUILDARCH}"
+ENV BUILDARCH=${BUILDARCH}
+RUN echo "Environment Build: ${BUILDARCH}"
 
 # USER root
 # RUN apt-get update -y
