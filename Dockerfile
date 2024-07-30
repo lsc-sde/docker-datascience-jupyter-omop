@@ -3,15 +3,14 @@ ARG BASE_IMAGE_TAG=ubuntu-22.04
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
-#ARG PLATFORM=$TARGETPLATFORM
 ARG VARIANT
 ARG VERSION
-
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 ARG BUILDARCH
 ENV BUILDARCH=${BUILDARCH}
 
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 USER root
 RUN apt-get update -y
