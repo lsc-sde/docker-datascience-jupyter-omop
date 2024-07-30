@@ -12,7 +12,7 @@ jobs:
             tagPrefix: darwin
             buildArgs: '[{
                             "VARIANT": "darwin",
-                            "VERSION": "v1.4.1",
+                            "VERSION": "v1.4.0",
                             "PLATFORM": "amd64"
                         }]'
         secrets: inherit
