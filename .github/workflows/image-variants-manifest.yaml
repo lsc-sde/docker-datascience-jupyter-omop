@@ -12,8 +12,7 @@ jobs:
             tagPrefix: base
             buildArgs: '[{
                             "VARIANT": "base",
-                            "VERSION": "v1",
-                            "PLATFORM": "amd64"
+                            "VERSION": "v1"
                         }]'
 
         secrets: inherit
