@@ -53,8 +53,6 @@ RUN rm -rf /var/lib/apt/lists/*
 
 USER ${NB_USER}
 
-
-
 FROM base AS darwin
 
 ARG TARGET_VERSION
@@ -66,6 +64,8 @@ ENV TARGETARCH=${TARGETARCH}
 RUN echo "TARGET_VERSION: ${TARGET_VERSION}"
 RUN echo "TARGETARCH: ${TARGETARCH}"
 RUN echo "DARWIN_BUILD_VERSION: ${DARWIN_BUILD_VERSION}"
+
+USER root
 
 RUN --mount=type=secret,id=PAT_TOKEN \
     export PAT_TOKEN=$(cat /run/secrets/PAT_TOKEN) && \
