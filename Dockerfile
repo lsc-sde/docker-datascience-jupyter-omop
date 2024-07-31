@@ -66,4 +66,7 @@ ENV TARGETARCH=${TARGETARCH}
 RUN echo "TARGET_VERSION: ${TARGET_VERSION}"
 RUN echo "TARGETARCH: ${TARGETARCH}"
 RUN echo "DARWIN_BUILD_VERSION: ${DARWIN_BUILD_VERSION}"
-RUN echo "PAT_TOKEN: ${PAT_TOKEN}"
+
+RUN --mount=type=secret,id=PAT_TOKEN \
+    export PAT_TOKEN=$(cat /run/secrets/PAT_TOKEN) && \
+    echo "Secret is: $PAT_TOKEN"

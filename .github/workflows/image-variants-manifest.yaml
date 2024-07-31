@@ -28,7 +28,6 @@ jobs:
         targets: '[ "darwin" ]'
         buildArgs: '[{
          "TARGET_VERSION": "v1",
-         "DARWIN_BUILD_VERSION": "v1.4.1",
-         "PAT_TOKEN": "${{ needs.config.outputs.encoded_pat_token }}"
+         "DARWIN_BUILD_VERSION": "v1.4.1"
          }]'
     secrets: inherit
