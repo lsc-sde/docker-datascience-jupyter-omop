@@ -60,6 +60,5 @@ ENV RSESSION_PROXY_RSTUDIO_1_4=True
 
 USER ${NB_USER}
 
-
-FROM base AS darwin
-RUN echo "darwin"
+#FROM base AS darwin
+#RUN echo "darwin"
