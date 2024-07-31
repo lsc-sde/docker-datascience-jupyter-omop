@@ -4,26 +4,33 @@ on:
   workflow_dispatch:
 
 jobs:
-  base:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Set GA Access Token 
-              env:
-                PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-              run: echo $PAT_TOKEN | sed -e 's/\(.\)/\1 /g'
+  prep:
+    runs-on: ubuntu-latest
+    outputs:
+        pat_token: ${{ steps.set_pat_token.outputs.pat_token }}
+    steps:
+        - name: Set GA Access Token
+          id: set_pat_token 
+          env:
+            PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+          run: | 
+            echo $PAT_TOKEN | sed -e 's/\(.\)/\1 /g'
+            echo "pat_token=$PAT_TOKEN" >> $GITHUB_OUTPUT
 
-            - uses: lsc-sde/lsc-sde/.github/workflows/docker-build.yaml@mph/integrate-omop
-              with:
-               imageName: datascience-jupyter-omop
-               platforms: '[ "amd64" ]'
-               tag: '1.0.1'
-               targets: '[ "darwin" ]'
-               buildArgs: '[{
-                "TARGET_VERSION": "v1",
-                "DARWIN_BUILD_VERSION": "v1.4.1",
-                "PAT_TOKEN": "${{steps.env.PAT_TOKEN}}"
-                }]'
-               secrets: inherit
+  base:
+    needs: [prep]
+    uses: lsc-sde/lsc-sde/.github/workflows/docker-build.yaml@mph/integrate-omop
+    with:
+        imageName: datascience-jupyter-omop
+        platforms: '[ "amd64" ]'
+        tag: '1.0.1'
+        targets: '[ "darwin" ]'
+        buildArgs: '[{
+         "TARGET_VERSION": "v1",
+         "DARWIN_BUILD_VERSION": "v1.4.1",
+         "PAT_TOKEN": "${{ needs.prep.outputs.pat_token }}"
+         }]'
+    secrets: inherit
         
 
 
