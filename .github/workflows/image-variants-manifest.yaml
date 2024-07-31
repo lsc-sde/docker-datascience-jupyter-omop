@@ -4,14 +4,15 @@ on:
     workflow_dispatch:
 jobs:
     base:
-        uses: lsc-sde/lsc-sde/.github/workflows/docker-build.yaml@mph/integrate-omop   #just call docker-build.yaml
+        uses: lsc-sde/lsc-sde/.github/workflows/docker-build.yaml@mph/integrate-omop
         with:
             imageName: datascience-jupyter-omop
             platforms: '[ "amd64" ]' #"arm64", 
             tag: 'v1'
-            #targets: '[ "base" ]'
+            targets: '[ "base" ]'
             buildArgs: '[{
-                            "VERSION": "v1"
+                            "TARGET_VERSION": "v1",
+                            "TAG_PREFIX": "base-v1"
                         }]'
 
         secrets: inherit

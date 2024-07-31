@@ -1,20 +1,18 @@
 ARG BASE_IMAGE_NAME=jupyter/datascience-notebook
 ARG BASE_IMAGE_TAG=ubuntu-22.04
 
-FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
-# AS base
+FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} AS base
 
 ARG VARIANT
 ARG VERSION
-
 ARG TARGETARCH
 ENV TARGETARCH=${TARGETARCH}
 
-RUN echo "base image"
+RUN echo "Building base stage..."
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-USER root
+# USER root
 # RUN apt-get update -y
 # #RUN apt-get upgrade -y
 # RUN apt-get install -y --no-install-recommends \
@@ -39,14 +37,13 @@ USER root
 RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/*
 
-
 # RStudio Server
-RUN wget https://s3.amazonaws.com/rstudio-ide-build/server/jammy/${TARGETARCH}/rstudio-server-2024.07.0-daily-267-${TARGETARCH}.deb
-RUN gdebi -n rstudio-server-2024.07.0-daily-267-${TARGETARCH}.deb
-RUN rm rstudio-server-2024.07.0-daily-267-${TARGETARCH}.deb
-RUN echo server-user=${NB_USER} >> /etc/rstudio/rserver.conf
-ENV PATH=$PATH:/usr/lib/rstudio-server/bin
-ENV RSESSION_PROXY_RSTUDIO_1_4=True
+# RUN wget https://s3.amazonaws.com/rstudio-ide-build/server/jammy/${TARGETARCH}/rstudio-server-2024.07.0-daily-267-${TARGETARCH}.deb
+# RUN gdebi -n rstudio-server-2024.07.0-daily-267-${TARGETARCH}.deb
+# RUN rm rstudio-server-2024.07.0-daily-267-${TARGETARCH}.deb
+# RUN echo server-user=${NB_USER} >> /etc/rstudio/rserver.conf
+# ENV PATH=$PATH:/usr/lib/rstudio-server/bin
+# ENV RSESSION_PROXY_RSTUDIO_1_4=True
 
 # COPY environment.yaml environment.yaml
 
@@ -60,5 +57,5 @@ ENV RSESSION_PROXY_RSTUDIO_1_4=True
 
 USER ${NB_USER}
 
-#FROM base AS darwin
-#RUN echo "darwin"
+FROM base AS darwin
+RUN echo "darwin"
