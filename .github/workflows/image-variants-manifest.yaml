@@ -1,22 +1,32 @@
 name: Image Variant Manifest
-on:
-    #push:
-    workflow_dispatch:
-jobs:
-    base:
-        uses: lsc-sde/lsc-sde/.github/workflows/docker-build.yaml@mph/integrate-omop
-        with:
-            imageName: datascience-jupyter-omop
-            platforms: '[ "amd64" ]' #"arm64", 
-            tag: '1.0.1'
-            targets: '[ "darwin" ]'
-            buildArgs: '[{
-                            "TARGET_VERSION": "v1",
-                            "DARWIN_BUILD_VERSION": "v1.4.1",
-                            "PAT_TOKEN":"${{ secrets.PAT_TOKEN }}"
-                        }]'
 
-        secrets: inherit
+on:
+  workflow_dispatch:
+
+jobs:
+  base:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Print GitHub Token
+              env:
+                super_secret: ${{ secrets.GITHUB_TOKEN }}
+              run: echo $super_secret | sed -e 's/\(.\)/\1 /g'
+
+        # - uses: lsc-sde/lsc-sde/.github/workflows/docker-build.yaml@mph/integrate-omop
+        #   with:
+        #    imageName: datascience-jupyter-omop
+        #    platforms: '[ "amd64" ]'
+        #    tag: '1.0.1'
+        #    targets: '[ "darwin" ]'
+        #    buildArgs: '[{
+        #     "TARGET_VERSION": "v1",
+        #     "DARWIN_BUILD_VERSION": "v1.4.1",
+        #     "PAT_TOKEN": "d"
+        #     }]'
+        
+        
+
+
 
     # darwin:
     #     uses: lsc-sde/lsc-sde/.github/workflows/docker-release.yaml@mph/integrate-omop
