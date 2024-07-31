@@ -9,7 +9,7 @@ jobs:
             imageName: datascience-jupyter-omop
             platforms: '[ "amd64" ]' #"arm64", 
             tag: 'v1'
-            targets: '[ "base" ]'
+            targets: '[ "darwin" ]'
             buildArgs: '[{
                             "TARGET_VERSION": "v1",
                             "TAG_PREFIX": "base-v1"

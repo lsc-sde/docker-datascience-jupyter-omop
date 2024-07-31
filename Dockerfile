@@ -12,7 +12,7 @@ RUN echo "Building base stage..."
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# USER root
+USER root
 # RUN apt-get update -y
 # #RUN apt-get upgrade -y
 # RUN apt-get install -y --no-install-recommends \
@@ -57,5 +57,5 @@ RUN rm -rf /var/lib/apt/lists/*
 
 USER ${NB_USER}
 
-FROM base AS darwin
+FROM python:3.9.19-slim-bullseye AS darwin
 RUN echo "darwin"
