@@ -23,7 +23,7 @@ jobs:
                 "DARWIN_BUILD_VERSION": "v1.4.1",
                 "PAT_TOKEN": "${{steps.env.PAT_TOKEN}}"
                 }]'
-        
+               secrets: inherit
         
 
 
