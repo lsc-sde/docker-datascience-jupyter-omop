@@ -8,11 +8,10 @@ jobs:
         with:
             imageName: datascience-jupyter-omop
             platforms: '[ "amd64", "arm64" ]' #"arm64", 
-            tag: 'v1'
+            tag: '1.0.1'
             targets: '[ "darwin" ]'
             buildArgs: '[{
-                            "TARGET_VERSION": "v1",
-                            "TAG_PREFIX": "base-v1"
+                            "TARGET_VERSION": "v1"
                         }]'
 
         secrets: inherit
