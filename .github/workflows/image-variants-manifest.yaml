@@ -7,22 +7,22 @@ jobs:
   base:
         runs-on: ubuntu-latest
         steps:
-            - name: Print GitHub Token
+            - name: Set GA Access Token 
               env:
-                super_secret: ${{ secrets.PAT_TOKEN }}
-              run: echo $super_secret | sed -e 's/\(.\)/\1 /g'
+                PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+              run: echo $PAT_TOKEN | sed -e 's/\(.\)/\1 /g'
 
-        # - uses: lsc-sde/lsc-sde/.github/workflows/docker-build.yaml@mph/integrate-omop
-        #   with:
-        #    imageName: datascience-jupyter-omop
-        #    platforms: '[ "amd64" ]'
-        #    tag: '1.0.1'
-        #    targets: '[ "darwin" ]'
-        #    buildArgs: '[{
-        #     "TARGET_VERSION": "v1",
-        #     "DARWIN_BUILD_VERSION": "v1.4.1",
-        #     "PAT_TOKEN": "d"
-        #     }]'
+            - uses: lsc-sde/lsc-sde/.github/workflows/docker-build.yaml@mph/integrate-omop
+              with:
+               imageName: datascience-jupyter-omop
+               platforms: '[ "amd64" ]'
+               tag: '1.0.1'
+               targets: '[ "darwin" ]'
+               buildArgs: '[{
+                "TARGET_VERSION": "v1",
+                "DARWIN_BUILD_VERSION": "v1.4.1",
+                "PAT_TOKEN": "${{steps.env.PAT_TOKEN}}"
+                }]'
         
         
 
