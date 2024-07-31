@@ -3,12 +3,9 @@ ARG BASE_IMAGE_TAG=ubuntu-22.04
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} AS base
 
-ARG VARIANT
-ARG VERSION
+ARG TARGET_VERSION
 ARG TARGETARCH
 ENV TARGETARCH=${TARGETARCH}
-
-RUN echo "Building base stage..."
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -54,8 +51,19 @@ RUN rm -rf /var/lib/apt/lists/*
 # RUN fix-permissions "${CONDA_DIR}"
 # RUN fix-permissions "/home/${NB_USER}"
 
-
 USER ${NB_USER}
 
-FROM python:3.9.19-slim-bullseye AS darwin
-RUN echo "darwin"
+
+
+FROM base AS darwin
+
+ARG TARGET_VERSION
+ARG TARGETARCH
+ARG DARWIN_BUILD_VERSION
+ARG PAT_TOKEN
+ENV TARGETARCH=${TARGETARCH}
+
+RUN echo "TARGET_VERSION: ${TARGET_VERSION}"
+RUN echo "TARGETARCH: ${TARGETARCH}"
+RUN echo "DARWIN_BUILD_VERSION: ${DARWIN_BUILD_VERSION}"
+RUN echo "PAT_TOKEN: ${PAT_TOKEN}"
