@@ -1,9 +1,7 @@
 ARG BASE_IMAGE_NAME=jupyter/datascience-notebook
 ARG BASE_IMAGE_TAG=ubuntu-22.04
 
-FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} 
-
-#AS base
+FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} AS base
 
 ARG VARIANT
 ARG VERSION
@@ -59,5 +57,5 @@ RUN rm -rf /var/lib/apt/lists/*
 
 USER ${NB_USER}
 
-#FROM python:3.9.19-slim-bullseye AS darwin
-#RUN echo "darwin"
+FROM python:3.9.19-slim-bullseye AS darwin
+RUN echo "darwin"
