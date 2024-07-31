@@ -1,7 +1,7 @@
 ARG BASE_IMAGE_NAME=jupyter/datascience-notebook
 ARG BASE_IMAGE_TAG=ubuntu-22.04
 
-FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
+FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} AS base
 
 ARG VARIANT
 ARG VERSION
@@ -57,3 +57,8 @@ RUN fix-permissions "/home/${NB_USER}"
 
 
 USER ${NB_USER}
+
+
+
+FROM base AS darwin
+RUN echo "darwin"
