@@ -7,14 +7,15 @@ jobs:
   config:
     runs-on: ubuntu-latest
     outputs:
-        encoded_pat_token: ${{ steps.set_pat_token.outputs.pat_token }}
+        encoded_pat_token: ${{ steps.set_pat_token.outputs.encoded_pat_token }}
     steps:
-        - name: Set GH PAT Token
+        - name: Encode PAT Token
           id: set_pat_token 
           env:
             PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
           run: | 
             PAT_TOKEN_BASE64=`echo -n $PAT_TOKEN | base64 -w 0`
+            echo "$PAT_TOKEN_BASE64"
             echo -n "encoded_pat_token=$API_TOKEN_BASE64" >> $GITHUB_OUTPUT
 
   darwin:
