@@ -7,7 +7,7 @@ jobs:
         uses: lsc-sde/lsc-sde/.github/workflows/docker-build.yaml@mph/integrate-omop   #just call docker-build.yaml
         with:
             imageName: datascience-jupyter-omop
-            platforms: '[ "amd64", "arm64" ]'
+            platforms: '[ "arm64" ]' #"amd64", 
             tag: 'v1'
             tagPrefix: base
             buildArgs: '[{
