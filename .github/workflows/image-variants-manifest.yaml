@@ -4,30 +4,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  config:
-    runs-on: ubuntu-latest
-    outputs:
-        encoded_pat_token: ${{ steps.set_pat_token.outputs.encoded_pat_token }}
-    steps:
-        - name: Encode PAT Token
-          id: set_pat_token 
-          env:
-            PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-          run: | 
-            PAT_TOKEN_BASE64=`echo -n $PAT_TOKEN | base64 -w 0`
-            echo "$PAT_TOKEN_BASE64"
-            echo -n "encoded_pat_token=$API_TOKEN_BASE64" >> $GITHUB_OUTPUT
-
   darwin:
-    needs: [config]
-    uses: lsc-sde/lsc-sde/.github/workflows/docker-build.yaml@mph/integrate-omop
+    uses: lsc-sde/lsc-sde/.github/workflows/docker-release.yaml@mph/integrate-omop #lsc-sde/lsc-sde/.github/workflows/docker-build.yaml@mph/integrate-omop
     with:
         imageName: datascience-jupyter-omop
         platforms: '[ "amd64" ]'
-        tag: '1.0.1'
         targets: '[ "darwin" ]'
         buildArgs: '[{
-         "TARGET_VERSION": "v1",
-         "DARWIN_BUILD_VERSION": "v1.4.0"
+            "TARGET_VERSION": "v1",
+            "DARWIN_BUILD_VERSION": "v1.4.0"
          }]'
     secrets: inherit
