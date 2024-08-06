@@ -32,10 +32,21 @@ RUN apt-get install -y --no-install-recommends \
  tigervnc-xorg-extension \
  default-jdk \
  default-jre \
- unzip
+ unzip \
+ odbcinst1debian2 \
+ libodbc1 \
+ odbcinst \
+ unixodbc \
+libsasl2-modules-gssapi-mit
 
 RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/*
+
+# ODBC driver
+RUN wget https://databricks-bi-artifacts.s3.us-east-2.amazonaws.com/simbaspark-drivers/odbc/2.8.2/SimbaSparkODBC-2.8.2.1013-Debian-64bit.zip \
+        && unzip SimbaSparkODBC-2.8.2.1013-Debian-64bit.zip \
+        && apt install ./simbaspark_2.8.2.1013-2_amd64.deb \
+        && rm *.*
 
 # RStudio Server
 RUN wget https://s3.amazonaws.com/rstudio-ide-build/server/jammy/${TARGETARCH}/rstudio-server-2024.07.0-daily-267-${TARGETARCH}.deb
