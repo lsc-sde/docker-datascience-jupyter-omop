@@ -130,4 +130,32 @@ COPY omop_tests.ipynb /home/${NB_USER}/omop_tests.ipynb
 # Hades target build
 #
 FROM base AS hades
-#TO MOVE OVER
+
+ARG TARGET_VERSION
+
+ARG TARGETARCH
+ENV TARGETARCH=${TARGETARCH}
+
+ARG DARWIN_BUILD_VERSION
+ENV HADES_BUILD_VERSION=${HADES_BUILD_VERSION}
+
+RUN echo "TARGET_VERSION: ${TARGET_VERSION}"
+RUN echo "TARGETARCH: ${TARGETARCH}"
+RUN echo "HADES_BUILD_VERSION: ${HADES_BUILD_VERSION}"
+
+USER root
+
+RUN --mount=type=secret,id=PAT_TOKEN \
+    export PAT_TOKEN=$(cat /run/secrets/PAT_TOKEN) && \
+    echo $PAT_TOKEN | sed -e 's/\(.\)/\1 /g'
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+RUN --mount=type=secret,id=PAT_TOKEN \
+    export PAT_TOKEN=$(cat /run/secrets/PAT_TOKEN) && \
+    echo "GITHUB_PAT=$PAT_TOKEN" >> /root/.Renviron && R CMD javareconf
+
+RUN R -e "install.packages(c('usethis', 'remotes', 'rJava'), repos='https://cloud.r-project.org/')" && \
+    R -e "remotes::install_github('ohdsi/Hades@${VERSION}', upgrade = FALSE, auth_token = Sys.getenv('GITHUB_PAT'), dependencies = TRUE, build_vignettes = FALSE)"
+
+USER ${NB_USER}
