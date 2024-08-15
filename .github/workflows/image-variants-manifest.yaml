@@ -5,7 +5,7 @@ on:
 
 jobs:
   darwin:
-    uses: lsc-sde/lsc-sde/.github/workflows/docker-release.yaml@mph/integrate-omop #lsc-sde/lsc-sde/.github/workflows/docker-build.yaml@mph/integrate-omop
+    uses: lsc-sde/lsc-sde/.github/workflows/docker-release.yaml@main #lsc-sde/lsc-sde/.github/workflows/docker-build.yaml@mph/integrate-omop
     with:
         imageName: datascience-jupyter-omop
         platforms: '[ "amd64" ]'
