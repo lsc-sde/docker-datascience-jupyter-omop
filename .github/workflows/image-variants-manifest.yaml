@@ -14,4 +14,5 @@ jobs:
             "TARGET_VERSION": "v1",
             "DARWIN_BUILD_VERSION": "v1.4.0"
          }]'
+        runnerType: 8x-linux-x64
     secrets: inherit
