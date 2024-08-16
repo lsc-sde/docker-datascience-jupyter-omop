@@ -151,6 +151,6 @@ RUN --mount=type=secret,id=PAT_TOKEN \
 
 RUN R -e "install.packages(c('parallel', 'git2r'), repos = 'https://cloud.r-project.org', Ncpus = 4 )" && \
     R -e "install.packages(c('remotes','Eunomia','RJDBC','tools'), repos='https://cloud.r-project.org/', Ncpus = parallel::detectCores() )" && \
-    R -e "remotes::install_github('ohdsi/Hades@${VERSION}', dependencies = TRUE, build_vignettes = FALSE, , Ncpus = parallel::detectCores() )"
+    R -e "remotes::install_github('ohdsi/Hades@${HADES_BUILD_VERSION}', dependencies = TRUE, build_vignettes = FALSE, , Ncpus = parallel::detectCores() )"
 
 USER ${NB_USER}
