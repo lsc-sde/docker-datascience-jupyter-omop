@@ -36,7 +36,9 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
  odbcinst \
  unixodbc \
  libsasl2-modules-gssapi-mit \
+ git \
  libgit2-dev \
+ libssh2-1-dev \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # ODBC driver & RStudio Server
@@ -143,6 +145,6 @@ RUN --mount=type=secret,id=PAT_TOKEN \
 
 RUN R -e "install.packages(c('parallel', 'git2r'), repos = 'https://cloud.r-project.org', Ncpus = 4 )" && \
     R -e "install.packages(c('remotes','Eunomia','RJDBC','tools'), repos='https://cloud.r-project.org/', Ncpus = parallel::detectCores() )" && \
-    R -e "remotes::install_github('ohdsi/Hades@${HADES_BUILD_VERSION}', dependencies = TRUE, build_vignettes = FALSE, , Ncpus = parallel::detectCores() )"
+    R -e "remotes::install_github('ohdsi/Hades@${HADES_BUILD_VERSION}', auth_token = Sys.getenv('GITHUB_PAT'), dependencies = TRUE, build_vignettes = FALSE, , Ncpus = parallel::detectCores() );"
 
 USER ${NB_USER}
