@@ -16,4 +16,5 @@ jobs:
             "HADES_BUILD_VERSION": "v1.15.0"
          }]'
         runnerType: 8x-linux-x64
+        directory: docker/datascience-jupyter-omop
     secrets: inherit
