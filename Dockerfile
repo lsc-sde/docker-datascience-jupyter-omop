@@ -102,7 +102,7 @@ RUN R -e "install.packages(c('parallel', 'git2r'), repos = 'https://cloud.r-proj
             if (length(rev_deps) > 0) { \
             install.packages(rev_deps, dependencies = TRUE, repos = 'https://cloud.r-project.org', Ncpus = parallel::detectCores() ); \
             }" \
-    && R -e "remotes::install_github('darwin-eu/CDMConnector@${DARWIN_BUILD_VERSION}', dependencies = TRUE, Ncpus = parallel::detectCores() )"
+    && R -e "remotes::install_github('darwin-eu/CDMConnector@${DARWIN_BUILD_VERSION}', auth_token = Sys.getenv('PAT_TOKEN'), dependencies = TRUE, Ncpus = parallel::detectCores() )"
 
 COPY darwin/ /tmp/darwin/
 WORKDIR /tmp/darwin
