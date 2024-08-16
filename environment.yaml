@@ -4,7 +4,6 @@ channels:
   - defaults
   - r
 dependencies:
-  - libgit2
   - cmake
   - r-arrow
   - r-rjava

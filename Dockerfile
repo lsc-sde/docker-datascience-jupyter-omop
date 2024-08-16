@@ -38,8 +38,7 @@ RUN apt-get install -y --no-install-recommends \
  odbcinst \
  unixodbc \
  libsasl2-modules-gssapi-mit \
- libgit2-dev \
- libgit2
+ libgit2-dev
 
 RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/*
@@ -100,7 +99,7 @@ RUN --mount=type=secret,id=PAT_TOKEN \
     export PAT_TOKEN=$(cat /run/secrets/PAT_TOKEN) && \
     echo "GITHUB_PAT=$PAT_TOKEN" >> /root/.Renviron && R CMD javareconf
 
-RUN R -e "install.packages(c('parallel'), repos = 'https://cloud.r-project.org', Ncpus = 2 )"
+RUN R -e "install.packages(c('parallel', 'git2r'), repos = 'https://cloud.r-project.org', Ncpus = 4 )"
 
 RUN R -e "install.packages(c('remotes','Eunomia','RJDBC','tools'), repos = 'https://cloud.r-project.org', Ncpus = parallel::detectCores() )"
 RUN R -e "r = getOption('repos'); \
