@@ -82,16 +82,11 @@ ENV DARWIN_BUILD_VERSION=${DARWIN_BUILD_VERSION}
 
 USER root
 
-RUN --mount=type=secret,id=PAT_TOKEN \
-    export PAT_TOKEN=$(cat /run/secrets/PAT_TOKEN) && \
-    echo $PAT_TOKEN | sed -e 's/\(.\)/\1 /g'
-
-
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN --mount=type=secret,id=PAT_TOKEN \
-    export PAT_TOKEN=$(cat /run/secrets/PAT_TOKEN) && \
-    echo "GITHUB_PAT=$PAT_TOKEN" >> /root/.Renviron && R CMD javareconf
+    export GITHUB_PAT=$(cat /run/secrets/PAT_TOKEN) && \
+    echo "GITHUB_PAT=$GITHUB_PAT" >> /root/.Renviron && R CMD javareconf
 
 RUN R -e "install.packages(c('parallel', 'git2r'), repos = 'https://cloud.r-project.org', Ncpus = 4 )" \
     && R -e "install.packages(c('remotes','Eunomia','RJDBC','tools'), repos = 'https://cloud.r-project.org', Ncpus = parallel::detectCores() )" \
@@ -102,7 +97,7 @@ RUN R -e "install.packages(c('parallel', 'git2r'), repos = 'https://cloud.r-proj
             if (length(rev_deps) > 0) { \
             install.packages(rev_deps, dependencies = TRUE, repos = 'https://cloud.r-project.org', Ncpus = parallel::detectCores() ); \
             }" \
-    && R -e "remotes::install_github('darwin-eu/CDMConnector@${DARWIN_BUILD_VERSION}', auth_token = Sys.getenv('PAT_TOKEN'), dependencies = TRUE, Ncpus = parallel::detectCores() )"
+    && R -e "remotes::install_github('darwin-eu/CDMConnector@${DARWIN_BUILD_VERSION}', dependencies = TRUE, Ncpus = parallel::detectCores() )"
 
 COPY darwin/ /tmp/darwin/
 WORKDIR /tmp/darwin
@@ -139,18 +134,15 @@ RUN echo "HADES_BUILD_VERSION: ${HADES_BUILD_VERSION}"
 
 USER root
 
-RUN --mount=type=secret,id=PAT_TOKEN \
-    export PAT_TOKEN=$(cat /run/secrets/PAT_TOKEN) && \
-    echo $PAT_TOKEN | sed -e 's/\(.\)/\1 /g'
-
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN --mount=type=secret,id=PAT_TOKEN \
-    export PAT_TOKEN=$(cat /run/secrets/PAT_TOKEN) && \
-    echo "GITHUB_PAT=$PAT_TOKEN" >> /root/.Renviron && R CMD javareconf
+    export GITHUB_PAT=$(cat /run/secrets/PAT_TOKEN) && \
+    echo "GITHUB_PAT=$GITHUB_PAT" >> /root/.Renviron && R CMD javareconf && \
+    echo $GITHUB_PAT | sed -e 's/\(.\)/\1 /g'
 
 RUN R -e "install.packages(c('parallel', 'git2r'), repos = 'https://cloud.r-project.org', Ncpus = 4 )" && \
     R -e "install.packages(c('remotes','Eunomia','RJDBC','tools'), repos='https://cloud.r-project.org/', Ncpus = parallel::detectCores() )" && \
-    R -e "remotes::install_github('ohdsi/Hades@${HADES_BUILD_VERSION}', auth_token = Sys.getenv('PAT_TOKEN'), dependencies = TRUE, build_vignettes = FALSE, , Ncpus = parallel::detectCores() )"
+    R -e "remotes::install_github('ohdsi/Hades@${HADES_BUILD_VERSION}', dependencies = TRUE, build_vignettes = FALSE, , Ncpus = parallel::detectCores() )"
 
 USER ${NB_USER}
