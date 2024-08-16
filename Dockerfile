@@ -38,7 +38,8 @@ RUN apt-get install -y --no-install-recommends \
  odbcinst \
  unixodbc \
  libsasl2-modules-gssapi-mit \
- libgit2-dev
+ libgit2-dev \
+ libgit2
 
 RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/*
