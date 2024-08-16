@@ -120,7 +120,6 @@ RUN mkdir /home/${NB_USER}/data && mkdir /home/${NB_USER}/drivers && echo "EUNOM
 
 COPY omop_tests.ipynb /home/${NB_USER}/omop_tests.ipynb
 
-
 #
 # Hades target build
 #
@@ -150,7 +149,8 @@ RUN --mount=type=secret,id=PAT_TOKEN \
     export PAT_TOKEN=$(cat /run/secrets/PAT_TOKEN) && \
     echo "GITHUB_PAT=$PAT_TOKEN" >> /root/.Renviron && R CMD javareconf
 
-RUN R -e "install.packages(c('usethis', 'remotes', 'rJava'), repos='https://cloud.r-project.org/')" && \
-    R -e "remotes::install_github('ohdsi/Hades@${VERSION}', upgrade = FALSE, auth_token = Sys.getenv('GITHUB_PAT'), dependencies = TRUE, build_vignettes = FALSE)"
+RUN R -e "install.packages(c('parallel', 'git2r'), repos = 'https://cloud.r-project.org', Ncpus = 4 )" && \
+    R -e "install.packages(c('remotes','Eunomia','RJDBC','tools'), repos='https://cloud.r-project.org/', Ncpus = parallel::detectCores() )" && \
+    R -e "remotes::install_github('ohdsi/Hades@${VERSION}', dependencies = TRUE, build_vignettes = FALSE, , Ncpus = parallel::detectCores() )"
 
 USER ${NB_USER}
