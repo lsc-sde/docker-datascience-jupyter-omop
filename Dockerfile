@@ -98,15 +98,16 @@ RUN --mount=type=secret,id=PAT_TOKEN \
     export PAT_TOKEN=$(cat /run/secrets/PAT_TOKEN) && \
     echo "GITHUB_PAT=$PAT_TOKEN" >> /root/.Renviron && R CMD javareconf
 
-RUN R -e "install.packages(c('remotes','Eunomia','RJDBC','tools'), repos = 'https://cloud.r-project.org')"
+RUN R -e "install.packages(c('parallel'), repos = 'https://cloud.r-project.org', Ncpus = 2 )"
+RUN R -e "install.packages(c('remotes','Eunomia','RJDBC','tools'), repos = 'https://cloud.r-project.org', Ncpus = parallel::detectCores() )"
 RUN R -e "r = getOption('repos'); \
         r['CRAN'] = 'http://cloud.r-project.org'; \
         options(repos = r); \
         rev_deps <- tools::package_dependencies('CDMConnector', reverse = TRUE, which = 'all')[[1]]; \
             if (length(rev_deps) > 0) { \
-            install.packages(rev_deps, dependencies = TRUE, repos = 'https://cloud.r-project.org'); \
+            install.packages(rev_deps, dependencies = TRUE, repos = 'https://cloud.r-project.org', Ncpus = parallel::detectCores() ); \
             }"
-RUN R -e "remotes::install_github('darwin-eu/CDMConnector@${DARWIN_BUILD_VERSION}', dependencies = TRUE)"
+RUN R -e "remotes::install_github('darwin-eu/CDMConnector@${DARWIN_BUILD_VERSION}', dependencies = TRUE, Ncpus = parallel::detectCores() )"
 
 COPY darwin/ /tmp/darwin/
 WORKDIR /tmp/darwin
