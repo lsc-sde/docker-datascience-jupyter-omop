@@ -88,9 +88,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN --mount=type=secret,id=PAT_TOKEN \
     export GITHUB_PAT=$(cat /run/secrets/PAT_TOKEN) && \
-    echo "GITHUB_PAT=$GITHUB_PAT" >> /root/.Renviron && R CMD javareconf
-
-RUN R -e "install.packages(c('parallel', 'git2r'), repos = 'https://cloud.r-project.org', Ncpus = 4 )" \
+    echo "GITHUB_PAT=$GITHUB_PAT" >> /root/.Renviron && R CMD javareconf && \
+    R -e "install.packages(c('parallel', 'git2r'), repos = 'https://cloud.r-project.org', Ncpus = 2 )" \
     && R -e "install.packages(c('remotes','Eunomia','RJDBC','tools'), repos = 'https://cloud.r-project.org', Ncpus = parallel::detectCores() )" \
     && R -e "r = getOption('repos'); \
         r['CRAN'] = 'http://cloud.r-project.org'; \
@@ -141,10 +140,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN --mount=type=secret,id=PAT_TOKEN \
     export GITHUB_PAT=$(cat /run/secrets/PAT_TOKEN) && \
     echo "GITHUB_PAT=$GITHUB_PAT" >> /root/.Renviron && R CMD javareconf && \
-    echo $GITHUB_PAT | sed -e 's/\(.\)/\1 /g'
-
-RUN R -e "install.packages(c('parallel', 'git2r'), repos = 'https://cloud.r-project.org', Ncpus = 4 )" && \
+    R -e "install.packages(c('parallel', 'git2r'), repos = 'https://cloud.r-project.org', Ncpus = 2 )" && \
     R -e "install.packages(c('remotes','Eunomia','RJDBC','tools'), repos='https://cloud.r-project.org/', Ncpus = parallel::detectCores() )" && \
-    R -e "remotes::install_github('ohdsi/Hades@${HADES_BUILD_VERSION}', auth_token = Sys.getenv('GITHUB_PAT'), dependencies = TRUE, build_vignettes = FALSE, , Ncpus = parallel::detectCores() );"
+    R -e "remotes::install_github('ohdsi/Hades@${HADES_BUILD_VERSION}', dependencies = TRUE, build_vignettes = FALSE, , Ncpus = parallel::detectCores() );"
 
 USER ${NB_USER}
