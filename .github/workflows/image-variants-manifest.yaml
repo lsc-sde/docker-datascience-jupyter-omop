@@ -11,10 +11,10 @@ jobs:
         platforms: '[ "amd64" ]'
         targets: '[ "darwin", "hades" ]'
         buildArgs: '[{
-            "TARGET_VERSION": "v1",
-            "DARWIN_BUILD_VERSION": "v1.4.0",
+            "TARGET_VERSION": "v2",
+            "DARWIN_BUILD_VERSION": "v1.5.0",
             "HADES_BUILD_VERSION": "v1.15.0"
          }]'
-        # runnerType: 8x-linux-x64
+        runnerType: 8x-linux-x64
         directory: docker/datascience-jupyter-omop
     secrets: inherit
