@@ -49,7 +49,8 @@ RUN wget https://databricks-bi-artifacts.s3.us-east-2.amazonaws.com/simbaspark-d
     wget https://s3.amazonaws.com/rstudio-ide-build/server/jammy/${TARGETARCH}/rstudio-server-2024.07.0-daily-267-${TARGETARCH}.deb \
     && gdebi -n rstudio-server-2024.07.0-daily-267-${TARGETARCH}.deb \
     && rm rstudio-server-2024.07.0-daily-267-${TARGETARCH}.deb \
-    && echo server-user=${NB_USER} >> /etc/rstudio/rserver.conf
+    && echo server-user=${NB_USER} >> /etc/rstudio/rserver.conf \
+    && echo "rsession-ld-library-path=${CONDA_DIR}/lib" >> /etc/rstudio/rserver.conf
 
 ENV PATH=$PATH:/usr/lib/rstudio-server/bin
 ENV RSESSION_PROXY_RSTUDIO_1_4=True
