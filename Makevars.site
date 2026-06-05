@@ -1,0 +1,18 @@
+CC = /usr/bin/gcc
+CXX = /usr/bin/g++
+CXX11 = /usr/bin/g++
+CXX14 = /usr/bin/g++
+CXX17 = /usr/bin/g++
+CXX20 = /usr/bin/g++
+CXX20STD = -std=c++20
+CC17 = /usr/bin/gcc
+CC90 = /usr/bin/gcc
+CC99 = /usr/bin/gcc
+CFLAGS = -O2 -fPIC
+CXXFLAGS = -O2 -fPIC
+CXX11FLAGS = -O2 -fPIC
+CXX14FLAGS = -O2 -fPIC
+CXX17FLAGS = -O2 -fPIC
+CXX20FLAGS = -O2 -fPIC -std=c++20
+FCFLAGS = -O2 -fPIC
+FFLAGS = -O2 -fPIC

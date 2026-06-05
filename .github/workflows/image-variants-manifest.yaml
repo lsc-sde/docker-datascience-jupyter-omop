@@ -1,20 +1,106 @@
-name: Image Variant Manifest
+name: Build & Publish Image
 
 on:
   workflow_dispatch:
+    inputs:
+      target:
+        description: Docker build target
+        required: true
+        default: darwin_core
+        type: choice
+        options:
+          - darwin_core
+          - jupyter_ds_base
+      darwin_build_version:
+        description: CDMConnector version (e.g. v1.5.0)
+        required: true
+        default: v1.5.0
+        type: string
+      version:
+        description: Image semver (e.g. 1.0.0)
+        required: true
+        default: 1.0.0
+        type: string
+      variant_name:
+        description: Friendly name included in the image tag (e.g. omop, hades)
+        required: true
+        default: omop
+        type: string
+      extra_packages:
+        description: Comma-separated extra R packages to install (e.g. ggplot2,dplyr)
+        required: false
+        default: ''
+        type: string
 
 jobs:
-  darwin:
-    uses: lsc-sde/lsc-sde/.github/workflows/docker-release.yaml@main #lsc-sde/lsc-sde/.github/workflows/docker-build.yaml@mph/integrate-omop
-    with:
-        imageName: datascience-jupyter-omop
-        platforms: '[ "amd64" ]'
-        targets: '[ "darwin", "hades" ]'
-        buildArgs: '[{
-            "TARGET_VERSION": "v2",
-            "DARWIN_BUILD_VERSION": "v1.5.0",
-            "HADES_BUILD_VERSION": "v1.15.0"
-         }]'
-        runnerType: 8x-linux-x64
-        directory: docker/datascience-jupyter-omop
-    secrets: inherit
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [amd64]
+
+    permissions:
+      contents: read
+      packages: write 
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: false
+          swap-storage: false
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push image for ${{ matrix.arch }}
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          target: ${{ inputs.target }}
+          platforms: linux/${{ matrix.arch }}
+          tags: |
+            ghcr.io/karectl/omop-notebook-workspace:${{ inputs.variant_name }}-v${{ inputs.version }}-${{ matrix.arch }}
+          build-args: |
+            RSTUDIO_VERSION=2026.05.0-218
+            TARGETARCH=${{ matrix.arch }}
+            DARWIN_BUILD_VERSION=${{ inputs.darwin_build_version }}
+            EXTRA_PACKAGES=${{ inputs.extra_packages }}
+          secrets: |
+            PAT_TOKEN=${{ secrets.PAT_TOKEN }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  tag-latest:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      packages: write
+    steps:
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tag as latest
+        run: |
+          docker buildx imagetools create \
+            -t ghcr.io/karectl/omop-notebook-workspace:${{ inputs.variant_name }}-v${{ inputs.version }} \
+            ghcr.io/karectl/omop-notebook-workspace:${{ inputs.variant_name }}-v${{ inputs.version }}-amd64
